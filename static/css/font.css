@@ -1,0 +1,35 @@
+@font-face {
+    font-family: logoFont;
+    src: url(/static/fonts/Playlist\ Script.otf);
+  }
+
+body{
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+}
+
+.navbar-brand{
+    font-family: logoFont, sans-serif;
+}
+
+h1, h2, h3 {
+  font-family: "Roboto", serif;
+}
+
+.stats-number {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+h5 {
+  font-family: "Roboto", serif;
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.author-name {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 0.9rem;
+}
