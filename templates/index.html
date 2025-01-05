@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    
+    <main>
+      <div class="container-fluid py-5 px-5">
+        <h1 class="fw-bold mb-3">Bibliothèque Dashboard</h1>
+        <div class="row mb-5 g-3">
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card-dash p-4 rounded">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex flex-column">
+                  <span class="text-muted">Total des livre</span>
+                  <span class="stats-number">2,143</span>
+                </div>
+                <div class="icon1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book h-6 w-6 text-white">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
+                </svg>                
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card-dash p-4 rounded">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex flex-column">
+                  <span class="text-muted">Active utilisateurs</span>
+                  <span class="stats-number">2,143</span>
+                </div>
+                <div class="icon2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users h-6 w-6 text-white">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>                
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card-dash p-4 rounded">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex flex-column">
+                  <span class="text-muted">Active emprunts</span>
+                  <span class="stats-number">2,143</span>
+                </div>
+                <div class="icon3">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-marked h-6 w-6 text-white">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
+                    <polyline points="10 2 10 10 13 7 16 10 16 2"></polyline>
+                </svg>                
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h2 class="fw-normal mb-3">Bibliothèque Dashboard</h2>
+        <div class="row g-3">
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card-dash rounded">
+                  <div class="book-image">
+                    <img src="{{url_for('static', filename='images/atomic+habits+book.jpeg')}}" alt="book">
+                  </div>
+                    <div class="d-flex flex-column px-4 py-3">
+                        <div class="d-flex flex-column mb-3">
+                            <h5 class="fw-bold">Atomic Habits</h5>
+                            <span class="author-name text-muted">James Clear</span>
+                        </div>
+                        <span class="Disponible">Disponible</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card-dash rounded">
+                  <div class="book-image">
+                    <img src="{{url_for('static', filename='images/book2.jpg')}}" alt="book">
+                  </div>
+                    <div class="d-flex flex-column px-4 py-3">
+                        <div class="d-flex flex-column mb-3">
+                            <h5 class="fw-bold">The Compound Effect</h5>
+                            <span class="author-name text-muted">Darren Hardy</span>
+                        </div>
+                        <span class="Disponible">Disponible</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card-dash rounded">
+                  <div class="book-image">
+                    <img src="{{url_for('static', filename='images/book3.jpg')}}" alt="book">
+                  </div>
+                    <div class="d-flex flex-column px-4 py-3">
+                        <div class="d-flex flex-column mb-3">
+                            <h5 class="fw-bold">Land of Zicola</h5>
+                            <span class="author-name text-muted">Amr Abdel Hamid</span>
+                        </div>
+                        <span class="Disponible">Disponible</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </main>
+    
+{% endblock %}
