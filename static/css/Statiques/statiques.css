@@ -1,0 +1,32 @@
+.icon1,
+.icon2,
+.icon3,
+.icon4 {
+    color: white; 
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+  }
+.icon1{
+    background-color: #3b82f6;
+}
+
+.icon2 {
+    background-color: #22c55e;
+  }
+
+.icon3 {
+    background-color: #ef4444;
+  }
+
+.icon4 {
+    background-color: #6366f1;
+  }
+
+  .card-dash{
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+  }
+
+  .text-custom{
+    color: #6366f1;
+  }

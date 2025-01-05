@@ -13,8 +13,7 @@ body{
 }
 
 h1, h2, h3 {
-  font-family: 'Playfair Display', serif;
-  font-weight: 600;
+  font-family: "Roboto", serif;
 }
 
 .stats-number {
@@ -24,7 +23,7 @@ h1, h2, h3 {
 }
 
 h5 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Roboto", serif;
   font-weight: 600;
   font-size: 1.25rem;
 }

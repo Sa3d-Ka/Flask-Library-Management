@@ -1,64 +1,35 @@
-*{
-    box-sizing: border-box;
-}
-
-
-:root {
-    --navbar-gradient-start: #1488CC; 
-    --navbar-gradient-end: #2B32B2;  
-    --nav-hover-color: #6DD5FA;       
-    --nav-hover-bg: rgba(255, 255, 255, 0.2);
-  }
-  
-  .bg-custom-gradient {
-    background: linear-gradient(90deg, var(--navbar-gradient-start), var(--navbar-gradient-end));
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .navbar-custom .nav-link {
-    color: #ffffff; 
-    transition: color 0.3s ease, background-color 0.3s ease;
-  }
-  
-  .navbar-custom .nav-link:hover {
-    color: var(--nav-hover-color); 
-    background-color: var(--nav-hover-bg);
-    border-radius: 4px; 
-    padding: 0.5rem; 
-  }
-
-  .icon1 {
-    background-color: #007bff;
+.icon1 {
+    background-color: #3b82f6;
     color: white; 
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    padding: 12px; 
+    padding: 15px;
     border-radius: 50%;
   }
 
   .icon2 {
-    background-color: #32ad47;
+    background-color: #22c55e;
     color: white;
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    padding: 12px;
+    padding: 15px;
     border-radius: 50%;
   }
 
   .icon3 {
-    background-color: #e73b3b;
+    background-color: #6366f1;
     color: white;
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    padding: 12px;
+    padding: 15px;
     border-radius: 50%;
   }
 
   .card-dash{
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
   }
 
 

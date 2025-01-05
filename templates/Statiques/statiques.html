@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% block body %}
+<main>
+  <div class="container-fluid py-3 py-md-5 px-md-5">
+    <h1 class="fw-bold mb-3 text-center text-md-start">Statistiques de la bibliothèque</h1>
+
+    <!-- Book Stats Section -->
+    <div class="mb-5">
+      <div class="p-4 rounded card-dash shadow">
+        <p class="h3 mb-4 text-center text-md-start">Statistiques du livre</p>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+          <div class="col">
+            <div class="d-flex align-items-center gap-3">
+              <div class="icon1 rounded-circle p-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-book-open h-5 w-5 text-white"
+                >
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                </svg>
+              </div>
+              <div class="d-flex flex-column">
+                <span class="text-muted">Total livres</span>
+                <span class="stats-number fs-3">2,143</span>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="d-flex align-items-center gap-3">
+              <div class="icon2 rounded-circle p-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-book-check h-5 w-5 text-white"
+                >
+                  <path
+                    d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"
+                  ></path>
+                  <path d="m9 9.5 2 2 4-4"></path>
+                </svg>
+              </div>
+              <div class="d-flex flex-column">
+                <span class="text-muted">Emprunts Actuellement</span>
+                <span class="stats-number fs-3">2,143</span>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="d-flex align-items-center gap-3">
+              <div class="icon3 rounded-circle p-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-book-x h-5 w-5 text-white"
+                >
+                  <path
+                    d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"
+                  ></path>
+                  <path d="m14.5 7-5 5"></path>
+                  <path d="m9.5 7 5 5"></path>
+                </svg>
+              </div>
+              <div class="d-flex flex-column">
+                <span class="text-muted">En retard</span>
+                <span class="stats-number fs-3">2,143</span>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="d-flex align-items-center gap-3">
+              <div class="icon4 rounded-circle p-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-line-chart h-5 w-5 text-white"
+                >
+                  <path d="M3 3v18h18"></path>
+                  <path d="m19 9-5 5-4-4-3 3"></path>
+                </svg>
+              </div>
+              <div class="d-flex flex-column">
+                <span class="text-muted">Emprunts mensuels</span>
+                <span class="stats-number fs-3">2,143</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Popular Books Section -->
+    <div class="rounded card-dash shadow p-4">
+      <div class="d-flex gap-3 align-items-center">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="30"
+          height="30"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="text-custom"
+        >
+          <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+          <polyline points="16 7 22 7 22 13"></polyline>
+        </svg>
+        <h3 class="mb-0">Populaires Livres</h3>
+      </div>
+      <div class="mt-4">
+        <div class="d-flex justify-content-between mb-3">
+          <span class="fs-5">Atomic Habits</span>
+          <span class="fs-5">63 Emprunts</span>
+        </div>
+        <div class="d-flex justify-content-between mb-3">
+          <span class="fs-5">The Compound Effect</span>
+          <span class="fs-5">48 Emprunts</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <span class="fs-5">Deep Work</span>
+          <span class="fs-5">13 Emprunts</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

@@ -1,0 +1,30 @@
+*{
+    box-sizing: border-box;
+}
+body{
+  background-color: #f9fafb;
+}
+
+:root {
+    --navbar-gradient-start: #1488CC; 
+    --navbar-gradient-end: #2B32B2;  
+    --nav-hover-color: #6DD5FA;       
+    --nav-hover-bg: rgba(255, 255, 255, 0.2);
+  }
+  
+  .bg-custom-gradient {
+    background: linear-gradient(90deg, var(--navbar-gradient-start), var(--navbar-gradient-end));
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar-custom .nav-link {
+    color: #ffffff; 
+    transition: color 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .navbar-custom .nav-link:hover {
+    color: var(--nav-hover-color); 
+    background-color: var(--nav-hover-bg);
+    border-radius: 4px; 
+    padding: 0.5rem; 
+  }
