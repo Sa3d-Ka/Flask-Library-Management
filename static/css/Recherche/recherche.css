@@ -1,0 +1,23 @@
+  .card-dash{
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+  }
+
+
+.book-image img{
+  height: 192px;
+  width: 100%;
+  object-fit: cover;
+  vertical-align: middle;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+
+}
+.Disponible{
+  padding: 5px 9px;
+  font-size: 14px;
+  color: #166534;
+  background-color: #dcfce7;
+  border-radius: 50px;
+  text-align: center;
+  width: fit-content;
+}
