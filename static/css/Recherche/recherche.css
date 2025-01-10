@@ -12,12 +12,26 @@
   border-top-right-radius: 6px;
 
 }
+
 .Disponible{
   padding: 5px 9px;
-  font-size: 14px;
+  font-size: 15px;
   color: #166534;
   background-color: #dcfce7;
   border-radius: 50px;
   text-align: center;
   width: fit-content;
+}
+.non-disponible{
+  padding: 5px 9px;
+  font-size: 15px;
+  color: #ac1724;
+  background-color: #ffadad;
+  border-radius: 50px;
+  text-align: center;
+  width: fit-content;
+}
+
+.borow{
+  color: #4f46e5 !important;
 }

@@ -1,4 +1,20 @@
-{% extends 'base.html' %} {% block body %}
+{% extends 'base.html' %} 
+
+{% block body %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+  {% for message, category in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+{% endwith %}
+
+
+
 <main>
   <div class="container-fluid py-3 py-md-5 px-md-5">
     <div
@@ -57,13 +73,19 @@
               </div>
               <div class="mb-3">
                 <label for="category" class="form-label">Category:</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="category"
-                  name="category"
-                  required
-                />
+                <select name="category" class="form-select">
+                  <option value="Fiction">Fiction</option>
+                  <option value="Non-Fiction">Non-Fiction</option>
+                  <option value="Science Fiction & Fantasy">
+                    Science Fiction & Fantasy
+                  </option>
+                  <option value="Mystery & Thriller">Mystery & Thriller</option>
+                  <option value="Romance">Romance</option>
+                  <option value="Self-Help & Personal Development">
+                    Self-Help & Personal Development
+                  </option>
+                  <option value="Other">Other</option>
+                </select>
               </div>
               <div class="mb-3">
                 <label for="url" class="form-label">URL:</label>
@@ -76,11 +98,14 @@
                 />
               </div>
               <div class="mb-3">
-                <label for="status" class="form-label">Status:</label>
-                <select class="form-select" id="status" name="status">
-                  <option value="Available">Available</option>
-                  <option value="On Loan">On Loan</option>
-                </select>
+                <label for="quantite" class="form-label">Quantite:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="quantite"
+                  name="quantite"
+                  required
+                />
               </div>
               <div class="modal-footer">
                 <button
@@ -161,11 +186,14 @@
                 />
               </div>
               <div class="mb-3">
-                <label for="editStatus" class="form-label">Status:</label>
-                <select class="form-select" id="editStatus" name="status">
-                  <option value="Available">Available</option>
-                  <option value="On Loan">On Loan</option>
-                </select>
+                <label for="editQuantite" class="form-label">Quantite:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="editQuantite"
+                  name="quantite"
+                  required
+                />
               </div>
               <div class="modal-footer">
                 <button
@@ -229,199 +257,72 @@
       </div>
     </div>
 
-    <table class="table">
-      <thead>
-        <tr>
-          <th>COVER</th>
-          <th>TITLE</th>
-          <th>AUTHOR</th>
-          <th>CATEGORY</th>
-          <th>STATUS</th>
-          <th>ACTIONS</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for isbn, details in books.items() %}
-        <tr>
-          <td class="py-2">
-            <img
-              src="{{ details['url'] }}"
-              alt="book"
-              class="rounded"
-              style="width: 50px; height: auto"
-            />
-          </td>
-          <td>
-            <span class="fw-bold">{{ details['titre'] }}</span><br />ISBN: {{
-            isbn }}
-          </td>
-          <td>{{ details['author'] }}</td>
-          <td>{{ details['category'] }}</td>
-          <td>
-            {% if details['status'] == 'On Loan' %}
-            <span class="non-disponible">{{ details['status'] }}</span>
-            {% else %}
-            <span class="Disponible">{{ details['status'] }}</span>
-            {% endif %}
-          </td>
-          <td class="btns">
-            <!-- Edit Button -->
-            <button
-              class="text-primary border-0 bg-white edit-btn"
-              data-bs-toggle="modal"
-              data-bs-target="#editBookModal"
-              data-isbn="{{ isbn }}"
-              data-titre="{{ details['titre'] }}"
-              data-author="{{ details['author'] }}"
-              data-category="{{ details['category'] }}"
-              data-url="{{ details['url'] }}"
-              data-status="{{ details['status'] }}"
-            >
-              <i class="fa-solid fa-pen"></i>
-            </button>
-            <!-- Delete Button -->
-            <button
-              class="text-danger border-0 bg-white delete-btn"
-              data-bs-toggle="modal"
-              data-bs-target="#deleteConfirmationModal"
-              data-isbn="{{ isbn }}"
-            >
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>COVER</th>
+            <th>TITLE</th>
+            <th>AUTHOR</th>
+            <th>CATEGORY</th>
+            <th>QUANTITE</th>
+            <th>ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for isbn, details in books.items() %}
+          <tr>
+            <td class="py-2">
+              <img
+                src="{{ details['url'] }}"
+                alt="book"
+                class="rounded"
+                style="width: 50px; height: auto"
+              />
+            </td>
+            <td>
+              <span class="fw-bold">{{ details['titre']|title }}</span
+              ><br />ISBN: {{ isbn }}
+            </td>
+            <td>{{ details['author']|title }}</td>
+            <td>{{ details['category'] }}</td>
+            <td>
+              {% if details['quantite'] <= 0 %}
+              <span>{{details['quantite']}}</span>
+              {% else %}
+              <span>{{details['quantite']}}</span>
+              {% endif %}
+            </td>
+            <td class="btns">
+              <!-- Edit Button -->
+              <button
+                class="text-primary border-0 bg-white edit-btn"
+                data-bs-toggle="modal"
+                data-bs-target="#editBookModal"
+                data-isbn="{{ isbn }}"
+                data-titre="{{ details['titre'] }}"
+                data-author="{{ details['author'] }}"
+                data-category="{{ details['category'] }}"
+                data-url="{{ details['url'] }}"
+                data-quantite="{{ details['quantite'] }}"
+              >
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <!-- Delete Button -->
+              <button
+                class="text-danger border-0 bg-white delete-btn"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteConfirmationModal"
+                data-isbn="{{ isbn }}"
+              >
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 </main>
-
-<script>
-  // Add event listeners to all edit buttons
-  document.querySelectorAll(".edit-btn").forEach((button) => {
-    button.addEventListener("click", () => {
-      // Get book details from data attributes
-      const isbn = button.getAttribute("data-isbn");
-      const titre = button.getAttribute("data-titre");
-      const author = button.getAttribute("data-author");
-      const category = button.getAttribute("data-category");
-      const url = button.getAttribute("data-url");
-      const status = button.getAttribute("data-status");
-
-      // Pre-fill the edit modal form
-      document.getElementById("editIsbn").value = isbn;
-      document.getElementById("editTitre").value = titre;
-      document.getElementById("editAuthor").value = author;
-      document.getElementById("editCategory").value = category;
-      document.getElementById("editUrl").value = url;
-      document.getElementById("editStatus").value = status;
-    });
-  });
-
-  // Handle edit form submission
-  document
-    .getElementById("editBookForm")
-    .addEventListener("submit", function (event) {
-      event.preventDefault();
-
-      // Get form data
-      const formData = new FormData(this);
-
-      // Send data to the server using Fetch API
-      fetch("/modifier_livre", {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => {
-          if (response.redirected) {
-            window.location.href = response.url; // Redirect to the livres page
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-
-      // Hide the modal after submission
-      const modal = bootstrap.Modal.getInstance(
-        document.getElementById("editBookModal")
-      );
-      modal.hide();
-    });
-
-  // Handle add book form submission
-  document
-    .getElementById("addBookForm")
-    .addEventListener("submit", function (event) {
-      event.preventDefault();
-
-      // Get form data
-      const formData = new FormData(this);
-
-      // Send data to the server using Fetch API
-      fetch("/ajouter_livre", {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => {
-          if (response.redirected) {
-            window.location.href = response.url; // Redirect to the livres page
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-
-      // Hide the modal after submission
-      const modal = bootstrap.Modal.getInstance(
-        document.getElementById("addBookModal")
-      );
-      modal.hide();
-
-      // Optionally, reset the form
-      this.reset();
-    });
-
-  // Variable to store the ISBN of the book to delete
-  let isbnToDelete = null;
-
-  // Add event listeners to all delete buttons
-  document.querySelectorAll(".delete-btn").forEach((button) => {
-    button.addEventListener("click", () => {
-      // Get the ISBN of the book to delete
-      isbnToDelete = button.getAttribute("data-isbn");
-
-      // Show the delete confirmation modal
-      const deleteModal = new bootstrap.Modal(
-        document.getElementById("deleteConfirmationModal")
-      );
-      deleteModal.show();
-    });
-  });
-
-  // Handle the confirm delete button click
-  document
-    .getElementById("confirmDeleteButton")
-    .addEventListener("click", () => {
-      if (isbnToDelete) {
-        // Send a DELETE request to the server
-        fetch(`/supprimer_livre/${isbnToDelete}`, {
-          method: "DELETE",
-        })
-          .then((response) => {
-            if (response.redirected) {
-              window.location.href = response.url; // Redirect to the livres page
-            }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-
-        // Hide the modal after submission
-        const modal = bootstrap.Modal.getInstance(
-          document.getElementById("deleteConfirmationModal")
-        );
-        modal.hide();
-      }
-    });
-</script>
 {% endblock %}

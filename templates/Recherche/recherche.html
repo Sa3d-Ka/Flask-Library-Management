@@ -1,98 +1,122 @@
-{% extends 'base.html' %} {% block body %}
+<!-- app/recherche/templates/recherche/recherche.html -->
+{% extends 'base.html' %} 
+{% block body %}
 <main>
   <div class="container-fluid py-3 py-md-5 px-md-5">
     <h1 class="fw-bold mb-4 text-center text-md-start">
       Rechercher des livres
     </h1>
     <div class="mb-5">
-      <div class="d-flex gap-3 align-items-center">
-        <div class="flex-grow-1 position-relative">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="position-absolute top-50 translate-middle-y text-secondary"
-            style="left: 12px; height: 20px; width: 20px"
-          >
-            <circle cx="11" cy="11" r="8"></circle>
-            <path d="m21 21-4.3-4.3"></path>
-          </svg>
-          <input
-            type="text"
-            class="form-control form-control-lg ps-5"
-            placeholder="Search by title, author, or ISBN..."
-          />
+      <form action="{{ url_for('Recherche') }}" method="GET">
+        <div class="row g-3 align-items-center">
+          <!-- Search Input -->
+          <div class="col-12 col-md-8 col-lg-9">
+            <div class="position-relative">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="position-absolute top-50 translate-middle-y text-secondary"
+                style="left: 12px; height: 20px; width: 20px"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+              </svg>
+              <input
+                type="text"
+                name="query"
+                class="form-control form-control-lg ps-5"
+                placeholder="Search by title, author, or ISBN..."
+                value="{{ request.args.get('query', '') }}"
+              />
+            </div>
+          </div>
+      
+          <!-- Category Dropdown -->
+          <div class="col-12 col-md-4 col-lg-3">
+            <select
+              name="category"
+              class="form-select form-select-lg"
+            >
+              <option value="">All</option>
+              <option value="Fiction">Fiction</option>
+              <option value="Non-Fiction">Non-Fiction</option>
+              <option value="Science Fiction & Fantasy">Science Fiction & Fantasy</option>
+              <option value="Mystery & Thriller">Mystery & Thriller</option>
+              <option value="Romance">Romance</option>
+              <option value="Self-Help & Personal Development">Self-Help & Personal Development</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+      
+          <!-- Search Button -->
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+          </div>
         </div>
-        <select
-          name="book-type"
-          class="form-select form-select-lg"
-          style="width: auto; min-width: 200px"
-        >
-          <option value="Fiction">All</option>
-          <option value="Fiction">Fiction</option>
-          <option value="Science">Science</option>
-        </select>
-      </div>
+      </form>
     </div>
 
+    <!-- Search Results -->
     <div class="row g-3">
-      <div class="col-12 col-md-6 col-lg-4">
-        <div class="card-dash rounded">
-          <div class="book-image">
-            <img
-              src="{{url_for('static', filename='images/atomic+habits+book.jpeg')}}"
-              alt="book"
-            />
-          </div>
-          <div class="d-flex flex-column px-4 py-3">
-            <div class="d-flex flex-column mb-3">
-              <h5 class="fw-bold">Atomic Habits</h5>
-              <span class="author-name text-muted">James Clear</span>
+      {% if books %}
+        {% for isbn, book in books.items() %}
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card-dash rounded">
+              <div class="book-image">
+                <img
+                  src="{{book['url']}}"
+                  alt="{{ book.titre }}"
+                />
+              </div>
+              <div class="d-flex flex-column px-4 py-3">
+                <div class="d-flex flex-column mb-3">
+                  <h5 class="fw-bold">{{ book.titre }}</h5>
+                  <span class="author-name text-muted">{{ book.author }}</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+
+                {% if book['quantite'] <= 0 %}
+                <span class="non-disponible">On Loan</span>
+                {% else %}
+                <span class="Disponible">Available</span>
+                {% endif %}
+
+                <button type="button" class="btn d-flex align-items-center gap-1">
+                  <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="borow"
+                >
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <polyline points="16 11 18 13 22 9"></polyline>
+                </svg>
+                 <span class="borow">Emprunter</span>
+              </button>
+              </div>
+              </div>
             </div>
-            <span class="Disponible">Disponible</span>
           </div>
+        {% endfor %}
+      {% else %}
+        <div class="col-12">
+          <p class="text-center">No books found.</p>
         </div>
-      </div>
-      <div class="col-12 col-md-6 col-lg-4">
-        <div class="card-dash rounded">
-          <div class="book-image">
-            <img
-              src="{{url_for('static', filename='images/book2.jpg')}}"
-              alt="book"
-            />
-          </div>
-          <div class="d-flex flex-column px-4 py-3">
-            <div class="d-flex flex-column mb-3">
-              <h5 class="fw-bold">The Compound Effect</h5>
-              <span class="author-name text-muted">Darren Hardy</span>
-            </div>
-            <span class="Disponible">Disponible</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-6 col-lg-4">
-        <div class="card-dash rounded">
-          <div class="book-image">
-            <img
-              src="{{url_for('static', filename='images/book3.jpg')}}"
-              alt="book"
-            />
-          </div>
-          <div class="d-flex flex-column px-4 py-3">
-            <div class="d-flex flex-column mb-3">
-              <h5 class="fw-bold">Land of Zicola</h5>
-              <span class="author-name text-muted">Amr Abdel Hamid</span>
-            </div>
-            <span class="Disponible">Disponible</span>
-          </div>
-        </div>
-      </div>
+      {% endif %}
     </div>
   </div>
 </main>
