@@ -1,11 +1,113 @@
 <!-- app/recherche/templates/recherche/recherche.html -->
-{% extends 'base.html' %} 
-{% block body %}
+{% extends 'base.html' %} {% block body %}
+
 <main>
   <div class="container-fluid py-3 py-md-5 px-md-5">
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+    <div class="flashes">
+      {% for category, message in messages %}
+      <div
+        class="alert alert-{{ category }} alert-dismissible text-center fade show"
+        role="alert"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %} {% endwith %}
     <h1 class="fw-bold mb-4 text-center text-md-start">
       Rechercher des livres
     </h1>
+
+    <!-- Borrow Book Modal -->
+    <div
+      class="modal fade"
+      id="borrowBookModal"
+      tabindex="-1"
+      aria-labelledby="borrowBookModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="borrowBookModalLabel">Borrow Book</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="borrowBookForm" action="/borrow_book" method="POST">
+              <input type="hidden" name="isbn" id="bookIsbn" value="" />
+              <div class="mb-3">
+                <label for="userId" class="form-label">Select User</label>
+                <select class="form-control" id="userId" name="userId" required>
+                  <option value="">Select a user</option>
+                  {% for user_id, user in users.items() %}
+                  <option value="{{ user_id }}">{{ user.fullname }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="dueDate" class="form-label">Select Due Date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="dueDate"
+                  name="dueDate"
+                  required
+                />
+              </div>
+              <div
+                class="d-flex justify-content-start align-items-center gap-3 p-3 bg-custom rounded my-4"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" x2="12" y1="8" y2="12"></line>
+                  <line x1="12" x2="12.01" y1="16" y2="16"></line>
+                </svg>
+                <p class="p-0 m-0">
+                  Please return the book by the due date to avoid late fees.
+                </p>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button type="submit" form="borrowBookForm" class="btn btn-primary">
+              Confirm Borrow
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="mb-5">
       <form action="{{ url_for('Recherche') }}" method="GET">
         <div class="row g-3 align-items-center">
@@ -37,24 +139,25 @@
               />
             </div>
           </div>
-      
+
           <!-- Category Dropdown -->
           <div class="col-12 col-md-4 col-lg-3">
-            <select
-              name="category"
-              class="form-select form-select-lg"
-            >
+            <select name="category" class="form-select form-select-lg">
               <option value="">All</option>
               <option value="Fiction">Fiction</option>
               <option value="Non-Fiction">Non-Fiction</option>
-              <option value="Science Fiction & Fantasy">Science Fiction & Fantasy</option>
+              <option value="Science Fiction & Fantasy">
+                Science Fiction & Fantasy
+              </option>
               <option value="Mystery & Thriller">Mystery & Thriller</option>
               <option value="Romance">Romance</option>
-              <option value="Self-Help & Personal Development">Self-Help & Personal Development</option>
+              <option value="Self-Help & Personal Development">
+                Self-Help & Personal Development
+              </option>
               <option value="Other">Other</option>
             </select>
           </div>
-      
+
           <!-- Search Button -->
           <div class="col-12">
             <button type="submit" class="btn btn-primary w-100">Search</button>
@@ -65,31 +168,53 @@
 
     <!-- Search Results -->
     <div class="row g-3">
-      {% if books %}
-        {% for isbn, book in books.items() %}
-          <div class="col-12 col-md-6 col-lg-4">
-            <div class="card-dash rounded">
-              <div class="book-image">
-                <img
-                  src="{{book['url']}}"
-                  alt="{{ book.titre }}"
-                />
-              </div>
-              <div class="d-flex flex-column px-4 py-3">
-                <div class="d-flex flex-column mb-3">
-                  <h5 class="fw-bold">{{ book.titre }}</h5>
-                  <span class="author-name text-muted">{{ book.author }}</span>
-                </div>
-                <div class="d-flex justify-content-between align-items-center">
-
-                {% if book['quantite'] <= 0 %}
-                <span class="non-disponible">On Loan</span>
-                {% else %}
-                <span class="Disponible">Available</span>
-                {% endif %}
-
-                <button type="button" class="btn d-flex align-items-center gap-1">
-                  <svg
+      {% if books %} {% for isbn, book in books.items() %}
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card-dash rounded">
+          <div class="book-image">
+            <img src="{{ book['url'] }}" alt="{{ book.titre }}" />
+          </div>
+          <div class="d-flex flex-column px-4 py-3">
+            <div class="d-flex flex-column mb-3">
+              <h5 class="fw-bold">{{ book.titre }}</h5>
+              <span class="author-name text-muted">{{ book.author }}</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              {% if book['quantite'] <= 0 %}
+              <span class="non-disponible">On Loan</span>
+              <button
+                type="button"
+                class="btn d-flex align-items-center gap-1 borow"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"
+                  ></path>
+                  <path d="M3 3v5h5"></path>
+                </svg>
+                <a href="/emprunts">Retourner</a>
+              </button>
+              {% else %}
+              <span class="Disponible">Available</span>
+              <button
+                type="button"
+                class="btn d-flex align-items-center gap-1"
+                data-bs-toggle="modal"
+                data-bs-target="#borrowBookModal"
+                data-book-title="{{ book.titre }}"
+                data-book-isbn="{{ isbn }}"
+              >
+                <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
                   height="20"
@@ -105,17 +230,17 @@
                   <circle cx="9" cy="7" r="4"></circle>
                   <polyline points="16 11 18 13 22 9"></polyline>
                 </svg>
-                 <span class="borow">Emprunter</span>
+                <span class="borow">Emprunter</span>
               </button>
-              </div>
-              </div>
+              {% endif %}
             </div>
           </div>
-        {% endfor %}
-      {% else %}
-        <div class="col-12">
-          <p class="text-center">No books found.</p>
         </div>
+      </div>
+      {% endfor %} {% else %}
+      <div class="col-12">
+        <p class="text-center">No books found.</p>
+      </div>
       {% endif %}
     </div>
   </div>

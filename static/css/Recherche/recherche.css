@@ -35,3 +35,16 @@
 .borow{
   color: #4f46e5 !important;
 }
+.borow a{
+  text-decoration: none;
+  color: #4f46e5 !important;
+}
+
+.bg-custom{
+  background-color: #fefce8;
+  color: #a16207;
+}
+.bg-custom p{
+  font-size: 18px;
+  opacity: 0.9;
+}

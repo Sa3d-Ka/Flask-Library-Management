@@ -57,7 +57,7 @@
               </div>
               <div class="d-flex flex-column">
                 <span class="text-muted">Emprunts Actuellement</span>
-                <span class="stats-number fs-3">2,143</span>
+                <span class="stats-number fs-3">{{emprunts|length}}</span>
               </div>
             </div>
           </div>
@@ -85,7 +85,7 @@
               </div>
               <div class="d-flex flex-column">
                 <span class="text-muted">En retard</span>
-                <span class="stats-number fs-3">2,143</span>
+                <span class="stats-number fs-3">{{delay_time}}</span>
               </div>
             </div>
           </div>
@@ -110,7 +110,7 @@
               </div>
               <div class="d-flex flex-column">
                 <span class="text-muted">Emprunts mensuels</span>
-                <span class="stats-number fs-3">2,143</span>
+                <span class="stats-number fs-3">{{new_emprunts_this_month}}</span>
               </div>
             </div>
           </div>
@@ -139,18 +139,14 @@
         <h3 class="mb-0">Populaires Livres</h3>
       </div>
       <div class="mt-4">
+        {% if sorted_emprunts_time %}
+        {% for title, num in sorted_emprunts_time.items() %}
         <div class="d-flex justify-content-between mb-3">
-          <span class="fs-5">Atomic Habits</span>
-          <span class="fs-5">63 Emprunts</span>
+          <span class="fs-5">{{title|title}}</span>
+          <span class="fs-5">{{num}} Emprunts</span>
         </div>
-        <div class="d-flex justify-content-between mb-3">
-          <span class="fs-5">The Compound Effect</span>
-          <span class="fs-5">48 Emprunts</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <span class="fs-5">Deep Work</span>
-          <span class="fs-5">13 Emprunts</span>
-        </div>
+        {% endfor %}
+        {% endif %}
       </div>
     </div>
   </div>

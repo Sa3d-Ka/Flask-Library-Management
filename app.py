@@ -5,12 +5,14 @@ import secrets
 
 app = Flask(__name__)
 
-# Generate a secret key if not already set
-if not app.secret_key:
-    app.secret_key = secrets.token_hex(16)
+app.secret_key = secrets.token_hex(16)
 
 books = {}
 users = {}
+emprunts = {}
+emprunts_time = {}
+
+
 
 def generate_isbn13():
     prefix = random.choice(["978", "979"])
@@ -42,12 +44,106 @@ def get_new_users_this_month(users):
 
     return new_users_this_month
 
+def get_new_emprunts_this_month(emprunts):
+    # Get the current month and year
+    current_month = datetime.now().month  # Current month (1-12)
+    current_year = datetime.now().year    # Current year
+
+    # Initialize a counter for borrowings this month
+    new_emprunts_this_month = 0
+
+    # Iterate through the emprunts dictionary
+    for emprunt_id, emprunt in emprunts.items():
+        try:
+            # Parse the borrowed_date string into a datetime object
+            borrowed_date = datetime.strptime(emprunt['borrowed_date'], "%Y-%m-%d %H:%M:%S")
+            
+            # Check if the borrowing was made in the current month and year
+            if borrowed_date.month == current_month and borrowed_date.year == current_year:
+                new_emprunts_this_month += 1
+        except (KeyError, ValueError):
+            # Skip invalid or missing dates
+            continue
+
+    return new_emprunts_this_month
+
+def calculate_delay(emprunts):
+    delay_time = 0  # Counter for overdue borrowings
+
+    # Iterate through the emprunts dictionary
+    for transaction_id, details in emprunts.items():
+        try:
+            # Parse the due_date string into a datetime object
+            due_date = datetime.strptime(details['due_date'], "%Y-%m-%d")
+            # Get the current date
+            current_date = datetime.now()
+            # Calculate the delay in days
+            delay = (current_date - due_date).days
+            # If the delay is positive, the book is overdue
+            if delay > 0:
+                delay_time += 1
+        except (KeyError, ValueError):
+            # Skip invalid or missing due dates
+            continue
+
+    return delay_time
+
+
 @app.route("/")
 def Home():
     return render_template('index.html',
            title='Home',
            css='index',
-           books=books)
+           books=books,
+           users=users,
+           emprunts=emprunts)
+
+@app.route("/borrow_book", methods=["POST"])
+def borrow_book():
+    isbn = request.form.get("isbn")
+    due_date = request.form.get("dueDate")
+    user_id = request.form.get("userId")
+
+    if not isbn or not due_date or not user_id:
+        flash("Invalid request. Please provide ISBN, due date, and user ID.", "danger")
+        return redirect(url_for("Recherche"))
+
+    if isbn not in books:
+        flash("Book not found.", "danger")
+        return redirect(url_for("Recherche"))
+
+    if user_id not in users:
+        flash("User not found.", "danger")
+        return redirect(url_for("Recherche"))
+
+    if books[isbn]["quantite"] <= 0:
+        flash("This book is currently on loan.", "danger")
+        return redirect(url_for("Recherche"))
+
+    # Decrease the book quantity
+    books[isbn]["quantite"] -= 1
+
+    # Create a unique transaction ID (e.g., using a timestamp)
+    transaction_id = f"{user_id}_{isbn}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+
+    # Save the borrowing details in the emprunts dictionary
+    emprunts[transaction_id] = {
+        "isbn": isbn,
+        "user_id": user_id,
+        "due_date": due_date,
+        "borrowed_date": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+        "book_title": books[isbn]["titre"],
+        "user_name": users[user_id]["fullname"]
+    }
+    
+    book_title = books[isbn]["titre"]
+    if book_title in emprunts_time:
+        emprunts_time[book_title] += 1
+    else:
+        emprunts_time[book_title] = 1
+
+    flash(f"Book '{books[isbn]['titre']}' borrowed successfully by User {users[user_id]['fullname']}. Due Date: {due_date}", "success")
+    return redirect(url_for("Recherche"))
 
 @app.route("/recherche")
 def Recherche():
@@ -56,15 +152,12 @@ def Recherche():
 
     filtered_books = {}
     for isbn, book in books.items():
-        # Check if the book matches the search query (title, author, or ISBN)
         matches_query = (
             query in book['titre'].lower() or
             query in book['author'].lower() or
             query in isbn.lower()
         )
-
-        # Check if the book matches the selected category
-        matches_category = (not category) or (book['category'] == category)
+        matches_category = (not category) or (book.get('category') == category)
 
         if matches_query and matches_category:
             filtered_books[isbn] = book
@@ -72,7 +165,9 @@ def Recherche():
     return render_template('Recherche/recherche.html',
            title='Recherche',
            css='Recherche/recherche',
-           books=filtered_books)
+           books=filtered_books,
+           users=users,  # Pass the users dictionary to the template
+           js='Recherche/recherche')
 
 @app.route("/livres")
 def livres():
@@ -90,9 +185,11 @@ def add_book():
     quantite = request.form.get('quantite')
     url = request.form.get('url')
 
+    # Check if the book already exists
     for isbn, book in books.items():
-            if book['titre'].lower() == title.lower():
-                return redirect(url_for('livres'))
+        if book['titre'].lower() == title.lower():
+            flash("A book with this title already exists.", "danger")
+            return redirect(url_for('livres'))
 
     # Generate a new ISBN
     isbn = generate_isbn13()
@@ -106,6 +203,7 @@ def add_book():
         'url': url
     }
 
+    flash(f"Book '{title}' added successfully!", "success")
     return redirect(url_for('livres'))
 
 @app.route('/modifier_livre', methods=['POST'])
@@ -125,7 +223,7 @@ def edit_book():
             'author': author,
             'category': category,
             'url': url,
-            'quantite': quantite
+            'quantite': int(quantite)
         }
 
     # Redirect to the livres page
@@ -139,6 +237,51 @@ def delete_book(isbn):
 
     # Redirect to the livres page
     return redirect(url_for('livres'))
+
+
+@app.route("/emprunts")
+def Emprunts():
+    x = datetime.now()
+    formatted_date = x.strftime("%Y/%m/%d %H:%M")
+    return render_template(
+        'Emprunts/emprunts.html',
+        title='Emprunts',
+        css='Emprunts/emprunts',
+        js='Emprunts/emprunts',
+        formatted_date=formatted_date,
+        emprunts=emprunts,
+        books=books
+    )
+
+@app.route("/return_book", methods=["POST"])
+def return_book():
+    # Get the transaction_id from the form
+    transaction_id = request.form.get("transaction_id")
+
+    # Check if the transaction_id exists in the emprunts dictionary
+    if transaction_id not in emprunts:
+        flash("Invalid transaction ID.", "danger")
+        return redirect(url_for("Emprunts"))
+
+    # Get the borrowing details
+    borrowing_details = emprunts[transaction_id]
+    isbn = borrowing_details["isbn"]
+
+    # Increase the book quantity in the books dictionary
+    if isbn in books:
+        books[isbn]["quantite"] += 1
+    else:
+        flash("Book not found in the library.", "danger")
+        return redirect(url_for("Emprunts"))
+
+    # Remove the borrowing record from the emprunts dictionary
+    del emprunts[transaction_id]
+
+    # Flash a success message
+    flash(f"Book '{borrowing_details['book_title']}' returned successfully.", "success")
+
+    # Redirect to the Emprunts page
+    return redirect(url_for("Emprunts"))
 
 @app.route("/utilisateurs")
 def Utilisateur():
@@ -200,10 +343,17 @@ def supprimer_utilisateur(user_id):
 
 @app.route("/statiques")
 def Statiques():
+    new_emprunts_this_month = get_new_emprunts_this_month(emprunts)
+    delay_time = calculate_delay(emprunts)
+    sorted_emprunts_time = dict(sorted(emprunts_time.items(), key=lambda item: item[1], reverse=True))
     return render_template('Statiques/statiques.html',
            title='Statiques',
            css='Statiques/statiques',
-           books=books)
+           books=books,
+           emprunts=emprunts,
+           sorted_emprunts_time=sorted_emprunts_time,
+           new_emprunts_this_month=new_emprunts_this_month,
+           delay_time=delay_time)
 
 if __name__ == '__main__':
     app.run(debug=True)

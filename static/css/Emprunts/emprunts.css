@@ -1,0 +1,37 @@
+.img-custom {
+  width: 100px; /* Adjust as needed */
+  height: 150px; /* Adjust as needed */
+  object-fit: cover; /* Ensures the image covers the area without distortion */
+}
+
+.custom{
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+  }
+
+  .Disponible{
+    padding: 5px 9px;
+    font-size: 15px;
+    color: #166534;
+    background-color: #dcfce7;
+    border-radius: 50px;
+    text-align: center;
+    width: fit-content;
+  }
+  .non-disponible{
+    padding: 5px 9px;
+    font-size: 15px;
+    color: #ac1724;
+    background-color: #ffadad;
+    border-radius: 50px;
+    text-align: center;
+    width: fit-content;
+  }
+
+  .bg-custom{
+    background-color: #fefce8;
+    color: #a16207;
+  }
+  .bg-custom p{
+    font-size: 18px;
+    opacity: 0.9;
+  }
