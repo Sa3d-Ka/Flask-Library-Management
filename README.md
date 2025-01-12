@@ -44,8 +44,8 @@ The Library Management System is a Flask-based web application designed to manag
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/yourusername/library-management-system.git
-   cd library-management-system
+   git clone https://github.com/Sa3d-Ka/Flask-Library-Management.git
+   cd Flask-Library-Management
    ```
 
 2. **Set Up a Virtual Environment**:
