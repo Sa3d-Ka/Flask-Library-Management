@@ -12,6 +12,26 @@ The Library Management System is a Flask-based web application designed to manag
 - **Popular Books**: Display a list of popular books sorted by the number of borrowings.
 - **Search Functionality**: Search for books by title, author, or ISBN.
 
+## Screenshots
+
+### Homepage
+![Homepage](https://res.cloudinary.com/du0x9ut5o/image/upload/v1736681090/v0wwp0arscdn6oc6audd.png)
+
+### Add Book
+![Add Book](https://res.cloudinary.com/du0x9ut5o/image/upload/v1736681090/c8uyyrtxvl8j0ijme9eo.png)
+
+### Add Users
+![Borrow Book](https://res.cloudinary.com/du0x9ut5o/image/upload/v1736681091/dtrndkvdxa5ciyzxsahc.png)
+
+### Return Book
+![Return Book](https://res.cloudinary.com/du0x9ut5o/image/upload/v1736681090/fszcxnbstgwaw5rbtvdd.png)
+
+### Popular Books
+![Popular Books](https://res.cloudinary.com/du0x9ut5o/image/upload/v1736681091/irc7sntxv2ixkqefiajb.png)
+
+### Search Functionality
+![Search Functionality](https://res.cloudinary.com/du0x9ut5o/image/upload/v1736681098/mmtqu6mnoicoby0kibg0.png)
+
 ## Installation
 
 ### Prerequisites
